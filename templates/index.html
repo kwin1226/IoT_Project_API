@@ -1,0 +1,82 @@
+<head>
+<meta charset="utf-8">
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='width=device-width, initial-scale=1.0' name='viewport'>
+<link href='http://fonts.googleapis.com/earlyaccess/cwtexyen.css' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+<link href="/static/css/application.css" rel="stylesheet" />
+<script src="/static/js/jquery-3.1.0.js"></script>
+</head>
+<title>PREtector 會員註冊</title>	
+	<!-- <link rel="stylesheet" href="css/style.css" type="text/css" media="all" /> -->
+	<script>
+
+		$(function(){
+			$('#user_update').submit(function(event){
+				event.preventDefault();
+				let data = {};
+				$.each($('#user_update').serializeArray(), function(i, field) {
+				    data[field.name] = field.value;
+				});
+				console.log(data);
+				var URL = "http://localhost:5000/user/";
+				$.ajax({
+				            url: URL,
+				            type: 'PUT',    
+				            data: JSON.stringify(data),
+				            contentType : 'application/json',
+				            success: function(result) {
+
+				                alert(result.message);
+				                $("#user_update")[0].reset(); //清空form表單資料
+				            }
+				        });
+			});
+			$('#user_delete').submit(function(event){
+				event.preventDefault();
+				let data = {};
+				$.each($('#user_delete').serializeArray(), function(i, field) {
+				    data[field.name] = field.value;
+				});
+				console.log(data);
+				var URL = "http://localhost:5000/user/"+ data.uid;
+				$.ajax({
+				            url: URL,
+				            type: 'DELETE',    
+				            success: function(result) {
+
+				                alert(result.message);
+				                $("#user_delete")[0].reset(); //清空form表單資料
+				            }
+				        });
+			});
+		});
+
+	</script>
+		<h1>PREtector API測試-會員</h1>
+		<div class="post">
+			<h2 class="post-title">新增</h2>
+			<form id="user_create" method="POST" action="http://localhost:5000/user/">
+				<label>使用者名稱：</label><input type="text" id="username" name="username" /><br>
+				<label>電子郵件：</label><input type="text" id="email" name="email" /><br>
+				<label>連絡電話：</label><input type="text" id="phone" name="phone" maxlength="10" /><br>
+				<input type="submit" value="註冊帳號" /><br>
+			</form>
+		</div>
+		<div class="post">
+			<h2 class="post-title">修改</h2>
+			<form id="user_update">
+				<label>使用者ID：</label><input type="text" id="uid" name="uid" maxlength="3" /><br>
+				<label>修改_名稱：</label><input type="text" id="username" name="username" /><br>
+				<label>修改_電郵：</label><input type="text" id="email" name="email" /><br>
+				<label>修改_電話：</label><input type="text" id="phone" name="phone" maxlength="10"/><br>
+				<input type="submit" value="修改帳號" /><br>
+			</form>
+		</div>
+		<div class="post">
+			<h2 class="post-title">刪除</h2>
+			<form id="user_delete" method="DELETE" action="http://localhost:5000/user/">
+				<label>使用者ID：</label><input type="text" id="uid" name="uid" maxlength="3"/><br>
+				<input type="submit" value="刪除帳號" /><br>
+			</form>
+		</div>
