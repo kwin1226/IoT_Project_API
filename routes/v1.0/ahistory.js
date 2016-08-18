@@ -5,7 +5,8 @@ function AHISTORY() {
 
 	this.get = function(res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from A_HISTORY', function(err, result) {
+	    con.query('select A_H_ID,H_ACCIDENT,DATE_FORMAT(H_TIME, "%Y-%m-%d %H:%i:%s") '+
+	    		  'as H_TIME, A_NAME,A_ID,E_ID,H_ID,EVE_ID from A_HISTORY', function(err, result) {
 	      con.release();
 	      var data = [];	
 	      for(var i=0; i<result.length; i++){
@@ -14,6 +15,7 @@ function AHISTORY() {
 	      		aid:result[i].A_ID,
 	      		hid:result[i].H_ID,
 	      		eid:result[i].E_ID,
+	      		eveid:result[i].EVE_ID,
 	      		accidentName:result[i].A_NAME,
 	      		historyAccident:result[i].H_ACCIDENT,
 	      		historyTime:result[i].H_TIME
@@ -27,7 +29,8 @@ function AHISTORY() {
 
 	this.find = function(id, res) {
 	  connection.acquire(function(err, con) {
-	    con.query('SELECT * FROM A_HISTORY WHERE E_ID = ? ',[id], function(err, result) {
+	    con.query('select A_H_ID,H_ACCIDENT,DATE_FORMAT(H_TIME, "%Y-%m-%d %H:%i:%s") '+
+	    		  'as H_TIME, A_NAME,A_ID,E_ID,H_ID,EVE_ID from A_HISTORY WHERE E_ID = ? ',[id], function(err, result) {
 	      con.release();
 	      var data = [];	
 	      for(var i=0; i<result.length; i++){
@@ -36,8 +39,10 @@ function AHISTORY() {
 	      		aid:result[i].A_ID,
 	      		hid:result[i].H_ID,
 	      		eid:result[i].E_ID,
-	      		historyAccident:result[i].H_TIME,
-	      		historyTime:result[i].A_NAME
+	      		eveid:result[i].EVE_ID,
+	      		accidentName:result[i].A_NAME,
+	      		historyAccident:result[i].H_ACCIDENT,
+	      		historyTime:result[i].H_TIME
 	      	};
 	       data[data.length] = tmp; //新增array
 	      }			
@@ -47,7 +52,7 @@ function AHISTORY() {
 	};
 
 	this.create = function(AHISTORY, res) {
-	   var sql_data = {H_ID:AHISTORY.hid, E_ID:AHISTORY.eid, A_ID:AHISTORY.aid, A_NAME:AHISTORY.accidentName, H_ACCIDENT:AHISTORY.historyAccident, H_TIME:AHISTORY.historyTime};
+	   var sql_data = {H_ID:AHISTORY.hid, E_ID:AHISTORY.eid, A_ID:AHISTORY.aid, EVE_ID:AHISTORY.eveid ,A_NAME:AHISTORY.accidentName, H_ACCIDENT:AHISTORY.historyAccident, H_TIME:AHISTORY.historyTime};
 	   sql_data = debug.checkReq(sql_data);
 	   connection.acquire(function(err, con) {
 	     con.query('insert into A_HISTORY set ?', sql_data, function(err, result) {
@@ -62,7 +67,7 @@ function AHISTORY() {
 	 };
 	 this.update = function(AHISTORY, res) {
 	   connection.acquire(function(err, con) {
-	   	 var sql_data = {H_ID:AHISTORY.hid, E_ID:AHISTORY.eid,A_ID:AHISTORY.aid, A_NAME:AHISTORY.accidentName,H_ACCIDENT:AHISTORY.historyAccident, H_TIME:AHISTORY.historyTime};
+	   	 var sql_data = {H_ID:AHISTORY.hid, E_ID:AHISTORY.eid, A_ID:AHISTORY.aid, EVE_ID:AHISTORY.eveid ,A_NAME:AHISTORY.accidentName, H_ACCIDENT:AHISTORY.historyAccident, H_TIME:AHISTORY.historyTime};
 	   	 sql_data = debug.checkReq(sql_data);
 	     con.query('update A_HISTORY set ? where A_H_ID = ?', [sql_data, AHISTORY.ahid], function(err, result) {
 	       con.release();

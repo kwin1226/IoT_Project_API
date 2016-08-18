@@ -8,7 +8,8 @@ var router = require('./router');
 var path    = require("path");
 var auth = require('./middleware').init;
 var conf = require('./conf').get(process.env.NODE_ENV)
- 
+// NODE_ENV=development node app.js
+
 var app = express();
 app.use('/static', express.static(__dirname + '/static'));
 app.use(bodyparser.urlencoded({extended: true}));

@@ -1,21 +1,21 @@
 var connection = require('../../connection');
 var debug = require('./debug/debug');
 
-function ACCIDENT() {
+function ACCRULES() {
 
 	this.get = function(res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from ACCIDENT', function(err, result) {
+	    con.query('select * from ACC_RULES', function(err, result) {
 	      con.release();
 	      var data = [];	
 		   for(var i=0; i<result.length; i++){
 		      	var tmp = {
 		      		aid:result[i].A_ID,
+		      		eveid:result[i].EVE_ID,
 		      		accidentName:result[i].A_NAME,
 		      		accidentSoulution:result[i].A_SOLUTION, 
 		      		accidentSymptom:result[i].A_SYMPTOM,
-		      		accidentTem:result[i].A_L_Tem, 
-		      		accidentHum:result[i].A_L_Hum
+		      		eventTrigger:result[i].EVE_TRIGGER
 		      	};
 		       data[data.length] = tmp; //新增array
 		    }
@@ -26,17 +26,17 @@ function ACCIDENT() {
 
 	this.find = function(id ,res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from ACCIDENT where A_ID = ? ',[id], function(err, result) {
+	    con.query('select * from ACC_RULES where A_ID = ? ',[id], function(err, result) {
 	      con.release();
 	       var data = [];	
 		   for(var i=0; i<result.length; i++){
 		      	var tmp = {
 		      		aid:result[i].A_ID,
+		      		eveid:result[i].EVE_ID,
 		      		accidentName:result[i].A_NAME,
 		      		accidentSoulution:result[i].A_SOLUTION, 
 		      		accidentSymptom:result[i].A_SYMPTOM,
-		      		accidentTem:result[i].A_L_Tem, 
-		      		accidentHum:result[i].A_L_Hum
+		      		eventTrigger:result[i].EVE_TRIGGER
 		      	};
 		       data[data.length] = tmp; //新增array
 		    }
@@ -45,31 +45,31 @@ function ACCIDENT() {
 	  });
 	};
 	
-	this.create = function(ACCIDENT, res) {
-	   var sql_data = {A_ID:ACCIDENT.aid, A_NAME:ACCIDENT.accidentName ,A_SOLUTION:ACCIDENT.accidentSoulution, A_SYMPTOM:ACCIDENT.accidentSymptom, A_L_Tem:ACCIDENT.accidentTem, A_L_Hum:ACCIDENT.accidentHum}
+	this.create = function(ACCRULES, res) {
+	   var sql_data = {A_ID:ACCRULES.aid, EVE_ID:ACCRULES.eveid, A_NAME:ACCRULES.accidentName ,A_SOLUTION:ACCRULES.accidentSoulution, A_SYMPTOM:ACCRULES.accidentSymptom, EVE_TRIGGER:ACCRULES.eventTrigger}
 	   sql_data = debug.checkReq(sql_data);
 	   connection.acquire(function(err, con) {
-	     con.query('insert into ACCIDENT set ?', sql_data, function(err, result) {
+	     con.query('insert into ACC_RULES set ?', sql_data, function(err, result) {
 	       con.release();
 	       if (err) {
-	         res.send({status: 1, message: 'ACCIDENT creation failed'});
+	         res.send({status: 1, message: 'ACCRULES creation failed'});
 	       } else {
-	         res.send({status: 0, message: 'ACCIDENT successfully'});
+	         res.send({status: 0, message: 'ACCRULES successfully'});
 	       }
 	     });
 	   });
 	 };
 
-	 this.update = function(ACCIDENT, res) {
+	 this.update = function(ACCRULES, res) {
 	   connection.acquire(function(err, con) {
-	   	 var sql_data = {A_ID:ACCIDENT.aid, A_NAME:ACCIDENT.accidentName ,A_SOLUTION:ACCIDENT.accidentSoulution, A_SYMPTOM:ACCIDENT.accidentSymptom, A_L_Tem:ACCIDENT.accidentTem, A_L_Hum:ACCIDENT.accidentHum}
+	   	 var sql_data = {A_ID:ACCRULES.aid, EVE_ID:ACCRULES.eveid, A_NAME:ACCRULES.accidentName ,A_SOLUTION:ACCRULES.accidentSoulution, A_SYMPTOM:ACCRULES.accidentSymptom, EVE_TRIGGER:ACCRULES.eventTrigger}
 	   	 sql_data = debug.checkReq(sql_data);
-	     con.query('update ACCIDENT set ? where A_ID = ?', [sql_data, ACCIDENT.did], function(err, result) {
+	     con.query('update ACC_RULES set ? where A_ID = ?', [sql_data, ACCRULES.aid], function(err, result) {
 	       con.release();
 	       if (err) {
-	         res.send({status: 1, message: 'ACCIDENT update failed'});
+	         res.send({status: 1, message: 'ACCRULES update failed'});
 	       } else {
-	         res.send({status: 0, message: 'ACCIDENT updated successfully'});
+	         res.send({status: 0, message: 'ACCRULES updated successfully'});
 	       }
 	     });
 	   });
@@ -77,7 +77,7 @@ function ACCIDENT() {
 
 	 this.delete = function(id, res) {
 	     connection.acquire(function(err, con) {
-	       con.query('delete from ACCIDENT where A_ID = ?', [id], function(err, result) {
+	       con.query('delete from ACC_RULES where A_ID = ?', [id], function(err, result) {
 	         con.release();
 	         if (err) {
 	           res.send({status: 1, message: 'Failed to delete'});
@@ -89,4 +89,4 @@ function ACCIDENT() {
 	   };
 }
 
-module.exports = new ACCIDENT();
+module.exports = new ACCRULES();

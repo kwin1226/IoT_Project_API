@@ -5,14 +5,21 @@ function HISTORY() {
 
 	this.get = function(res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from HISTORY', function(err, result) {
+	    con.query('select H_ID, E_ID, EVE_ID, H_Tem, H_Hum, H_ACCIDENT, '+
+	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME, '+
+	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME from HISTORY', function(err, result) {
 	      con.release();
 	      var data = [];	
 	      for(var i=0; i<result.length; i++){
 	      	var tmp = {
-	      		sid:result[i].S_ID,
+	      		hid:result[i].H_ID,
 	      		eid:result[i].E_ID,
-	      		sensorName:result[i].S_NAME
+	      		eveid:result[i].EVE_ID,
+	      		historyTem:result[i].H_Tem,
+	      		historyHum:result[i].H_Hum,
+	      		historyAccident:result[i].H_ACCIDENT,
+	      		historyTime:result[i].H_TIME,
+	      		historyUTime:result[i].H_U_TIME
 	      	};
 	       data[data.length] = tmp; //新增新array
 	      }
@@ -23,18 +30,22 @@ function HISTORY() {
 
 	this.find = function(id, res) {
 	  connection.acquire(function(err, con) {
-	    con.query('SELECT * FROM HISTORY WHERE E_ID = ? ',[id], function(err, result) {
+	    con.query('select H_ID, E_ID, EVE_ID, H_Tem, H_Hum, H_ACCIDENT, '+
+	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME, '+
+	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME '+
+	    		  'FROM HISTORY WHERE E_ID = ? ',[id], function(err, result) {
 	      con.release();
 	      var data = [];	
 	      for(var i=0; i<result.length; i++){
 	      	var tmp = {
-	      		hid:H_ID,
-	      		eid:E_ID,
-	      		tid:U_ID,
+	      		hid:result[i].H_ID,
+	      		eid:result[i].E_ID,
+	      		eveid:result[i].EVE_ID,
 	      		historyTem:result[i].H_Tem,
 	      		historyHum:result[i].H_Hum,
 	      		historyAccident:result[i].H_ACCIDENT,
-	      		historyTime:H_TIME
+	      		historyTime:result[i].H_TIME,
+	      		historyUTime:result[i].H_U_TIME
 	      	};
 	       data[data.length] = tmp; //新增array
 	      }			
@@ -44,7 +55,7 @@ function HISTORY() {
 	};
 
 	this.create = function(HISTORY, res) {
-	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid, H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime};
+	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
 	   sql_data = debug.checkReq(sql_data);
 	   connection.acquire(function(err, con) {
 	     con.query('insert into HISTORY set ?', sql_data, function(err, result) {
@@ -59,7 +70,7 @@ function HISTORY() {
 	 };
 	 this.update = function(HISTORY, res) {
 	   connection.acquire(function(err, con) {
-	   	 var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid, H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime};
+	   	 var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
 	   	 sql_data = debug.checkReq(sql_data);
 	     con.query('update HISTORY set ? where H_ID = ?', [sql_data, HISTORY.hid], function(err, result) {
 	       con.release();

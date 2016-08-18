@@ -32,6 +32,29 @@ function DEMAND() {
 	    });
 	  });
 	};
+
+	this.join = function(id ,res) {
+	  connection.acquire(function(err, con) {
+	    con.query('select * from ACC_RULES where A_ID IN '+
+	    		  '(select A_ID from D_NEED WHERE D_ID = '+
+	    		  '(select D_ID from Equipment where E_ID = ? ))',[id], function(err, result) {
+	      con.release();
+	       var data = [];	
+		   for(var i=0; i<result.length; i++){
+		      	var tmp = {
+		      		aid:result[i].A_ID,
+		      		eveid:result[i].EVE_ID,
+		      		accidentName:result[i].A_NAME,
+		      		accidentSoulution:result[i].A_SOLUTION, 
+		      		accidentSymptom:result[i].A_SYMPTOM,
+		      		eventTrigger:result[i].EVE_TRIGGER
+		      	};
+		       data[data.length] = tmp; //新增array
+		    }
+	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格式
+	    });
+	  });
+	};
 	
 	this.create = function(DEMAND, res) {
 	   var sql_data = {C_ID:DEMAND.uid, D_UPDATE_TIME:DEMAND.demandTime ,D_NAME:DEMAND.demandName, D_H_SICK:DEMAND.demandSick,D_YEARS_OLD:DEMAND.demandAge}
