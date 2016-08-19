@@ -55,7 +55,7 @@ function HISTORY() {
 	};
 
 	this.create = function(HISTORY, res) {
-	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
+	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:parseInt(HISTORY.historyAccident,10), H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
 	   sql_data = debug.checkReq(sql_data);
 	   connection.acquire(function(err, con) {
 	     con.query('insert into HISTORY set ?', sql_data, function(err, result) {
