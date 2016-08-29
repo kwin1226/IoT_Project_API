@@ -15,7 +15,7 @@ var tool = require('cloneextend'),
         db:             {
             mysql:          {
                 host        : '140.138.77.152',
-                user        : 'bigdata_team04',
+                user        : 'mysql_bot1',
                 password    : '284gj4rm42l3xjp4',
                 database    : '2016_bigdata_team04'
             }
