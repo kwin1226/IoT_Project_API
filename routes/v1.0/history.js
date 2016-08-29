@@ -5,7 +5,7 @@ function HISTORY() {
 
 	this.get = function(res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select H_ID, E_ID, EVE_ID, H_Tem, H_Hum, H_ACCIDENT, '+
+	    con.query('select H_ID, E_ID, EVE_ID, H_TEM, H_HUM, H_ACCIDENT, '+
 	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME, '+
 	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME from HISTORY', function(err, result) {
 	      con.release();
@@ -15,8 +15,8 @@ function HISTORY() {
 	      		hid:result[i].H_ID,
 	      		eid:result[i].E_ID,
 	      		eveid:result[i].EVE_ID,
-	      		historyTem:result[i].H_Tem,
-	      		historyHum:result[i].H_Hum,
+	      		historyTem:result[i].H_TEM,
+	      		historyHum:result[i].H_HUM,
 	      		historyAccident:result[i].H_ACCIDENT,
 	      		historyTime:result[i].H_TIME,
 	      		historyUTime:result[i].H_U_TIME
@@ -30,7 +30,7 @@ function HISTORY() {
 
 	this.find = function(id, res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select H_ID, E_ID, EVE_ID, H_Tem, H_Hum, H_ACCIDENT, '+
+	    con.query('select H_ID, E_ID, EVE_ID, H_TEM, H_HUM, H_ACCIDENT, '+
 	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME, '+
 	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME '+
 	    		  'FROM HISTORY WHERE E_ID = ? ',[id], function(err, result) {
@@ -41,8 +41,8 @@ function HISTORY() {
 	      		hid:result[i].H_ID,
 	      		eid:result[i].E_ID,
 	      		eveid:result[i].EVE_ID,
-	      		historyTem:result[i].H_Tem,
-	      		historyHum:result[i].H_Hum,
+	      		historyTem:result[i].H_TEM,
+	      		historyHum:result[i].H_HUM,
 	      		historyAccident:result[i].H_ACCIDENT,
 	      		historyTime:result[i].H_TIME,
 	      		historyUTime:result[i].H_U_TIME
@@ -55,7 +55,7 @@ function HISTORY() {
 	};
 
 	this.create = function(HISTORY, res) {
-	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:parseInt(HISTORY.historyAccident,10), H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
+	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_TEM:HISTORY.historyTem, H_HUM:HISTORY.historyHum, H_ACCIDENT:parseInt(HISTORY.historyAccident,10), H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
 	   sql_data = debug.checkReq(sql_data);
 	   connection.acquire(function(err, con) {
 	     con.query('insert into HISTORY set ?', sql_data, function(err, result) {
@@ -70,7 +70,7 @@ function HISTORY() {
 	 };
 	 this.update = function(HISTORY, res) {
 	   connection.acquire(function(err, con) {
-	   	 var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_Tem:HISTORY.historyTem, H_Hum:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
+	   	 var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_TEM:HISTORY.historyTem, H_HUM:HISTORY.historyHum, H_ACCIDENT:HISTORY.historyAccident, H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
 	   	 sql_data = debug.checkReq(sql_data);
 	     con.query('update HISTORY set ? where H_ID = ?', [sql_data, HISTORY.hid], function(err, result) {
 	       con.release();
