@@ -3,7 +3,6 @@ var bodyparser = require('body-parser');
 var moment = require('moment');
 var colors = require('colors');
 var connection = require('./connection');
-// var router = require('./router');
 var router = require('./router');
 var path    = require("path");
 var auth = require('./middleware').init;

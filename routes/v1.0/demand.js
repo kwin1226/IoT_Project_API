@@ -14,7 +14,8 @@ function DEMAND() {
 
 	this.find = function(id ,res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from DEMAND where C_ID = ? ',[id], function(err, result) {
+	    con.query('select D_ID, C_ID, D_NAME, DATE_FORMAT(D_UPDATE_TIME,"%Y-%m-%d %H:%i:%s") as D_UPDATE_TIME, '+
+	    		  'D_H_SICK, D_YEARS_OLD from DEMAND where C_ID = ? ',[id], function(err, result) {
 	      con.release();
 	       var data = [];	
 		   for(var i=0; i<result.length; i++){

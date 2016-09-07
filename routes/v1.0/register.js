@@ -5,7 +5,9 @@ function REGISTER() {
 
 	this.get = function(res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from OpenProduct', function(err, result) {
+	    con.query('select C_ID, E_ID, '+
+	    		  'DATE_FORMAT(O_OPEN_TIME,"%Y-%m-%d %H:%i:%s") as O_OPEN_TIME '+
+	    		  'from OpenProduct', function(err, result) {
 	      con.release();
 	      var data = [];	
 	      for(var i=0; i<result.length; i++){
@@ -23,8 +25,9 @@ function REGISTER() {
 
 	this.find = function(id, res) {
 	  connection.acquire(function(err, con) {
-	    con.query('SELECT C_ID, A.E_ID, D_ID, E_NAME, E_MAKE_DAY, O_OPEN_TIME FROM '+
-	    		  '(SELECT * FROM Equipment WHERE E_ID IN (SELECT E_ID FROM OpenProduct WHERE C_ID = ?)) as A '+
+	    con.query('SELECT C_ID, A.E_ID, D_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME, '+
+	    		  'DATE_FORMAT(O_OPEN_TIME,"%Y-%m-%d %H:%i:%s") as O_OPEN_TIME FROM '+
+	    		  '(SELECT * FROM EQUIPMENT WHERE E_ID IN (SELECT E_ID FROM OpenProduct WHERE C_ID = ?)) as A '+
 	    		  'join (SELECT * FROM OpenProduct WHERE C_ID = ?) as B on A.E_ID = B.E_ID;', 
 	    		  [id,id], function(err, result) {
 	      con.release();
@@ -35,7 +38,7 @@ function REGISTER() {
 	      		eid:result[i].E_ID, 
 	      		did:result[i].D_ID,
 	      		equipName:result[i].E_NAME, 
-	      		equipPROD:result[i].E_MAKE_DAY, 
+	      		equipPROD:result[i].E_MAKE_TIME, 
 	      		activitedTime:result[i].O_OPEN_TIME
 	      	};
 	       data[data.length] = tmp; //新增array
