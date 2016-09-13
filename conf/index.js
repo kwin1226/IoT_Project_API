@@ -31,7 +31,7 @@ var tool = require('cloneextend'),
             password    : 'GR+adJAdWOxFQMLFHAWPig==', //testpassword
             realm       : 'Authenticated',
             version     : ['v1.0'],
-            routes      : ['user','demand','equips','register','sens', 'history','ahistory','event','accrules','dneed'],
+            routes      : ['user','demand','equips','register','sens', 'history','ahistory','event','accrules','dneed','directory'],
             middleware  : ['compress','json','urlencoded','logger']
         },
         server:         {

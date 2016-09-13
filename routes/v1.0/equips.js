@@ -12,15 +12,31 @@ function EQUIPMENT() {
 	  });
 	};
 
-	this.find = function(E_ID,res) {
+	this.find = function(id, res) {
 	  connection.acquire(function(err, con) {
-	    con.query('select * from EQUIPMENT where E_ID = ? ',[E_ID], function(err, result) {
+	    con.query('select E_ID, D_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME, DIR_ID, C_ID, DIR_NAME from '+
+	    		 '(select EQUIPMENT.E_ID, EQUIPMENT.D_ID, EQUIPMENT.E_NAME, EQUIPMENT.E_MAKE_TIME, DIRECTORY.DIR_ID, DIRECTORY.C_ID ,DIRECTORY.DIR_NAME '+
+	    	     'from EQUIPMENT, DIRECTORY where EQUIPMENT.DIR_ID = DIRECTORY.DIR_ID) '+
+	    	     'as A where A.E_ID = ?',[id], function(err, result) {
 	      con.release();
-	      res.send(result);
+	      var data = [];	
+	      for(var i=0; i<result.length; i++){
+	      	var tmp = {
+	      		eid:result[i].E_ID, 
+	      		did:result[i].D_ID,
+	      		cid:result[i].C_ID,
+	      		dirid:result[i].DIR_ID,
+	      		equipName:result[i].E_NAME, 
+	      		equipPROD:result[i].E_MAKE_TIME,
+	      		dirName:result[i].DIR_NAME
+	      	};
+	       data[data.length] = tmp; //新增array
+	      }			
+	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格
 	    });
 	  });
 	};
-	
+
 	this.create = function(EQUIPMENT, res) {
 	   var sql_data = {E_ID:EQUIPMENT.eid, D_ID:EQUIPMENT.did, E_NAME:EQUIPMENT.equipName, E_MAKE_TIME:EQUIPMENT.equipPROD};
 	   sql_data = debug.checkReq(sql_data);
