@@ -54,6 +54,71 @@ function HISTORY() {
 	  });
 	};
 
+
+	this.findBytime = function(data, res) {
+		 var start = decodeURIComponent(data[0]);
+		 var end = decodeURIComponent(data[1]);
+		 var id = data[2];
+		console.log("start:" + start);
+		console.log("end:" + end);
+	  connection.acquire(function(err, con) {
+	    con.query('select H_ID, E_ID, EVE_ID, H_TEM, H_HUM, H_TIME, H_ACCIDENT, '+
+	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME_F, '+
+	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME '+
+	    		  'from HISTORY where H_TIME >= ? AND H_TIME < ? AND E_ID = ? order by H_TIME ',[start, end, id], function(err, result) {
+	      con.release();
+	      var data = [];	
+	      for(var i=0; i<result.length; i++){
+	      	var tmp = {
+	      		hid:result[i].H_ID,
+	      		eid:result[i].E_ID,
+	      		eveid:result[i].EVE_ID,
+	      		historyTem:result[i].H_TEM,
+	      		historyHum:result[i].H_HUM,
+	      		historyGMT:result[i].H_TIME,
+	      		historyAccident:result[i].H_ACCIDENT,
+	      		historyTime:result[i].H_TIME_F,
+	      		historyUTime:result[i].H_U_TIME
+	      	};
+	       data[data.length] = tmp; //新增array
+	      }			
+	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格式
+	    });
+	  });
+	};
+
+	this.findBytimelimt = function(data, res) {
+		 var start = decodeURIComponent(data[0]);
+		 var end = decodeURIComponent(data[1]);
+		 var id = data[2];
+
+	  connection.acquire(function(err, con) {
+	    con.query('select H_ID, E_ID, EVE_ID, H_TEM, H_HUM, H_TIME, H_ACCIDENT, '+
+	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME_F, '+
+	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME '+
+	    		  'from HISTORY where H_TIME > ? order by H_TIME limit 1',[start, end, id], function(err, result) {
+	      con.release();
+	      var data = [];	
+	      for(var i=0; i<result.length; i++){
+	      	var tmp = {
+	      		hid:result[i].H_ID,
+	      		eid:result[i].E_ID,
+	      		eveid:result[i].EVE_ID,
+	      		historyTem:result[i].H_TEM,
+	      		historyHum:result[i].H_HUM,
+	      		historyGMT:result[i].H_TIME,
+	      		historyAccident:result[i].H_ACCIDENT,
+	      		historyTime:result[i].H_TIME_F,
+	      		historyUTime:result[i].H_U_TIME
+	      	};
+	       data[data.length] = tmp; //新增array
+	      }			
+	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格式
+	    });
+	  });
+	};
+
+
 	this.create = function(HISTORY, res) {
 	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_TEM:HISTORY.historyTem, H_HUM:HISTORY.historyHum, H_ACCIDENT:parseInt(HISTORY.historyAccident,10), H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};
 	   sql_data = debug.checkReq(sql_data);
