@@ -52,8 +52,7 @@ function HISTORY() {
 	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格式
 	    });
 	  });
-	};
-
+	};	
 
 	this.findBytime = function(data, res) {
 		 var start = decodeURIComponent(data[0]);
@@ -89,14 +88,13 @@ function HISTORY() {
 
 	this.findBytimelimt = function(data, res) {
 		 var start = decodeURIComponent(data[0]);
-		 var end = decodeURIComponent(data[1]);
-		 var id = data[2];
+		 var id = data[1];
 
 	  connection.acquire(function(err, con) {
 	    con.query('select H_ID, E_ID, EVE_ID, H_TEM, H_HUM, H_TIME, H_ACCIDENT, '+
 	    		  'DATE_FORMAT(H_TIME,"%Y-%m-%d %H:%i:%s") as H_TIME_F, '+
 	    		  'DATE_FORMAT(H_U_TIME,"%Y-%m-%d %H:%i:%s") as H_U_TIME '+
-	    		  'from HISTORY where H_TIME > ? order by H_TIME limit 1',[start, end, id], function(err, result) {
+	    		  'from HISTORY where H_TIME > ? AND E_ID = ? order by H_TIME limit 1',[start, id], function(err, result) {
 	      con.release();
 	      var data = [];	
 	      for(var i=0; i<result.length; i++){
@@ -117,7 +115,6 @@ function HISTORY() {
 	    });
 	  });
 	};
-
 
 	this.create = function(HISTORY, res) {
 	   var sql_data = {E_ID:HISTORY.eid, U_ID:HISTORY.tid,EVE_ID:HISTORY.eveid ,H_TEM:HISTORY.historyTem, H_HUM:HISTORY.historyHum, H_ACCIDENT:parseInt(HISTORY.historyAccident,10), H_TIME:HISTORY.historyTime, H_U_TIME:HISTORY.historyUTime};

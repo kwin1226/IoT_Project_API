@@ -14,9 +14,9 @@ function DIRECTORY() {
 	      		dirid:result[i].DIR_ID,
 	      		dirName:result[i].DIR_NAME
 	      	};
-	       data[data.length] = tmp; //新增array
+	       data[data.length] = tmp; 
 	      }			
-	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格
+	      res.send(JSON.stringify(data)); 
 	    });
 	  });
 	};
@@ -46,48 +46,48 @@ function DIRECTORY() {
 	  });
 	};
 
-	// this.create = function(DIRECTORY, res) {
-	//    var sql_data = {E_ID:DIRECTORY.eid, D_ID:DIRECTORY.did, E_NAME:DIRECTORY.equipName, E_MAKE_TIME:DIRECTORY.equipPROD};
-	//    sql_data = debug.checkReq(sql_data);
-	//    connection.acquire(function(err, con) {
-	//      con.query('insert into DIRECTORY set ?', sql_data, function(err, result) {
-	//        con.release();
-	//        if (err) {
-	//          res.send({status: 1, message: 'DIRECTORY creation failed'});
-	//        } else {
-	//          res.send({status: 0, message: 'DIRECTORY successfully'});
-	//        }
-	//      });
-	//    });
-	//  };
+	this.create = function(DIRECTORY, res) {
+	   var sql_data = {C_ID:DIRECTORY.cid, DIR_NAME:DIRECTORY.dirName};
+	   sql_data = debug.checkReq(sql_data);
+	   connection.acquire(function(err, con) {
+	     con.query('insert into DIRECTORY set ?', sql_data, function(err, result) {
+	       con.release();
+	       if (err) {
+	         res.send({status: 1, message: 'DIRECTORY creation failed'});
+	       } else {
+	         res.send({status: 0, message: 'DIRECTORY successfully'});
+	       }
+	     });
+	   });
+	 };
 
-	 // this.update = function(DIRECTORY, res) {
-	 //   connection.acquire(function(err, con) {
-	 //   	 var sql_data = {E_ID:DIRECTORY.eid, E_NAME:DIRECTORY.equipName, D_ID:DIRECTORY.did};
-	 //   	 sql_data = debug.checkReq(sql_data);
-	 //     con.query('update DIRECTORY set ? where E_ID = ?', [sql_data, DIRECTORY.eid], function(err, result) {
-	 //       con.release();
-	 //       if (err) {
-	 //         res.send({status: 1, message: 'DIRECTORY update failed'});
-	 //       } else {
-	 //         res.send({status: 0, message: 'DIRECTORY updated successfully'});
-	 //       }
-	 //     });
-	 //   });
-	 // };
+	 this.update = function(DIRECTORY, res) {
+	   connection.acquire(function(err, con) {
+	   	 var sql_data = {DIR_NAME:DIRECTORY.dirName};
+	   	 sql_data = debug.checkReq(sql_data);
+	     con.query('update DIRECTORY set ? where DIR_ID = ?', [sql_data, DIRECTORY.dirid], function(err, result) {
+	       con.release();
+	       if (err) {
+	         res.send({status: 1, message: 'DIRECTORY update failed'});
+	       } else {
+	         res.send({status: 0, message: 'DIRECTORY updated successfully'});
+	       }
+	     });
+	   });
+	 };
 
-	 // this.delete = function(E_ID, res) {
-	 //     connection.acquire(function(err, con) {
-	 //       con.query('delete from DIRECTORY where DIR_ID = ?', [E_ID], function(err, result) {
-	 //         con.release();
-	 //         if (err) {
-	 //           res.send({status: 1, message: 'Failed to delete'});
-	 //         } else {
-	 //           res.send({status: 0, message: 'Deleted successfully'});
-	 //         }
-	 //       });
-	 //     });
-	 //   };
+	 this.delete = function(id, res) {
+	     connection.acquire(function(err, con) {
+	       con.query('delete from DIRECTORY where DIR_ID = ?', [id], function(err, result) {
+	         con.release();
+	         if (err) {
+	           res.send({status: 1, message: 'Failed to delete'});
+	         } else {
+	           res.send({status: 0, message: 'Deleted successfully'});
+	         }
+	       });
+	     });
+	   };
 
 }
 
