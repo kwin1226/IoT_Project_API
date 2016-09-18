@@ -27,14 +27,17 @@ module.exports = {
             app.delete('/'+ ver +'/' + val +'/:id', function(req, res){
                 handlers[val].delete(req.params.id, res);
                 });
+            app.get('/'+ ver +'/' + val +'/child/:id', function(req, res){ //目前只有directory.js用到
+                handlers[val].findchild(req.params.id, res);
+                });
             app.delete('/'+ ver +'/' + val +'/:id1/:id2', function(req, res){
                 handlers[val].delete(req.params.id1, req.params.id2, res);
                 });
-            app.get('/'+ ver +'/' + val +'/:id/date/:start/:end', function(req, res){ //目前只有threshold.js用到
+            app.get('/'+ ver +'/' + val +'/:id/date/:start/:end', function(req, res){ //目前只有history.js用到
                 var array =[req.params.start, req.params.end, req.params.id];
                 handlers[val].findBytime(array, res);
                 });
-            app.get('/'+ ver +'/' + val +'/:id/date/:start/', function(req, res){ //目前只有threshold.js用到
+            app.get('/'+ ver +'/' + val +'/:id/date/:start/', function(req, res){ //目前只有history.js用到
                 var array =[req.params.start, req.params.id];
                 handlers[val].findBytimelimt(array, res);
                 });

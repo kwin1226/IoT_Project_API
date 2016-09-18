@@ -21,7 +21,25 @@ function DIRECTORY() {
 	  });
 	};
 
-	this.find = function(id, res) {
+	this.find = function(id,res) {
+	  connection.acquire(function(err, con) {
+	    con.query('select * from DIRECTORY where C_ID = ?', [id] , function(err, result) {
+	      con.release();
+	      var data = [];	
+	      for(var i=0; i<result.length; i++){
+	      	var tmp = {
+	      		cid:result[i].C_ID,
+	      		dirid:result[i].DIR_ID,
+	      		dirName:result[i].DIR_NAME
+	      	};
+	       data[data.length] = tmp; 
+	      }			
+	      res.send(JSON.stringify(data)); 
+	    });
+	  });
+	};
+
+	this.findchild = function(id, res) {
 	  connection.acquire(function(err, con) {
 	    con.query('select * from ' +
 	    	'( select EQUIPMENT.E_ID, EQUIPMENT.D_ID, EQUIPMENT.E_NAME, EQUIPMENT.E_MAKE_TIME, DIRECTORY.DIR_ID, DIRECTORY.DIR_NAME '+
