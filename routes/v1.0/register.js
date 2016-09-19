@@ -41,6 +41,7 @@ function REGISTER() {
 	      		uid:result[i].C_ID, 
 	      		eid:result[i].E_ID, 
 	      		did:result[i].D_ID,
+	      		dirid:result[i].DIR_ID,
 	      		dirName:result[i].DIR_NAME,
 	      		equipName:result[i].E_NAME, 
 	      		equipPROD:result[i].E_MAKE_TIME, 
