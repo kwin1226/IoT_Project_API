@@ -23,26 +23,33 @@ function REGISTER() {
 	  });
 	};
 
+
+
 	this.find = function(id, res) {
 	  connection.acquire(function(err, con) {
-	    con.query('SELECT C_ID, A.E_ID, D_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME, '+
+	    con.query('SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
+	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
 	    		  'DATE_FORMAT(O_OPEN_TIME,"%Y-%m-%d %H:%i:%s") as O_OPEN_TIME FROM '+
 	    		  '(SELECT * FROM EQUIPMENT WHERE E_ID IN (SELECT E_ID FROM OpenProduct WHERE C_ID = ?)) as A '+
-	    		  'join (SELECT * FROM OpenProduct WHERE C_ID = ?) as B on A.E_ID = B.E_ID;', 
-	    		  [id,id], function(err, result) {
+	    		  'join (SELECT * FROM OpenProduct WHERE C_ID = ? ) as B on A.E_ID = B.E_ID) as C ' +
+	    		  'join (SELECT * FROM DIRECTORY WHERE C_ID = ? ) as D on C.DIR_ID = D.DIR_ID;', 
+	    		  [id,id,id], function(err, result) {
 	      con.release();
-	      var data = [];	
-	      for(var i=0; i<result.length; i++){
+	      var data = [];
+
+	      for(var i=0; i< result.length; i++){
 	      	var tmp = {
 	      		uid:result[i].C_ID, 
 	      		eid:result[i].E_ID, 
 	      		did:result[i].D_ID,
+	      		dirid:result[i].DIR_ID,
+	      		dirName:result[i].DIR_NAME,
 	      		equipName:result[i].E_NAME, 
 	      		equipPROD:result[i].E_MAKE_TIME, 
 	      		activitedTime:result[i].O_OPEN_TIME
 	      	};
 	       data[data.length] = tmp; //新增array
-	      }			
+	      }		
 	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格式
 	    });
 	  });
