@@ -26,7 +26,7 @@ function REGISTER() {
 
 
 	this.find = function(id, res) {  //JSON 格式比較特別
-	  connection.acquire(function(err, con) {
+	  connection.acquire(function(err, con) { 
 	    con.query('SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
 	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
 	    		  'DATE_FORMAT(O_OPEN_TIME,"%Y-%m-%d %H:%i:%s") as O_OPEN_TIME FROM '+
