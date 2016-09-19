@@ -42,7 +42,7 @@ function DIRECTORY() {
 	this.findchild = function(id, res) {
 	  connection.acquire(function(err, con) {
 	    con.query('select * from ' +
-	    	'( select EQUIPMENT.E_ID, EQUIPMENT.D_ID, EQUIPMENT.E_NAME, EQUIPMENT.E_MAKE_TIME, DIRECTORY.DIR_ID, DIRECTORY.DIR_NAME '+
+	    	'( select EQUIPMENT.E_ID, EQUIPMENT.D_ID, EQUIPMENT.E_NAME, DATE_FORMAT(EQUIPMENT.E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME, DIRECTORY.DIR_ID, DIRECTORY.DIR_NAME '+
 	    	'from EQUIPMENT, DIRECTORY where EQUIPMENT.DIR_ID = DIRECTORY.DIR_ID) as A ' + 
 	    	'where A.DIR_ID = ?',[id], function(err, result) {
 	      con.release();

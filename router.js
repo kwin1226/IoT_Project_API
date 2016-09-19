@@ -41,6 +41,9 @@ module.exports = {
                 var array =[req.params.start, req.params.id];
                 handlers[val].findBytimelimt(array, res);
                 });
+            app.get('/'+ ver +'/' + val +'/:id1/:id2', function(req, res){
+                handlers[val].search(req.params.id1, req.params.id2, res);
+                });
             } catch (err) {
                 console.error("||err: " + err.code);
                 res.statusCode = 500;
