@@ -25,7 +25,7 @@ function REGISTER() {
 
 
 
-	this.find = function(id, res) {
+	this.find = function(id, res) {  //JSON 格式比較特別
 	  connection.acquire(function(err, con) {
 	    con.query('SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
 	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
@@ -35,22 +35,26 @@ function REGISTER() {
 	    		  'join (SELECT * FROM DIRECTORY WHERE C_ID = ? ) as D on C.DIR_ID = D.DIR_ID;', 
 	    		  [id,id,id], function(err, result) {
 	      con.release();
-	      var data = [];
-
+	      var data = {}; 
 	      for(var i=0; i< result.length; i++){
 	      	var tmp = {
 	      		uid:result[i].C_ID, 
 	      		eid:result[i].E_ID, 
 	      		did:result[i].D_ID,
-	      		dirid:result[i].DIR_ID,
 	      		dirName:result[i].DIR_NAME,
 	      		equipName:result[i].E_NAME, 
 	      		equipPROD:result[i].E_MAKE_TIME, 
 	      		activitedTime:result[i].O_OPEN_TIME
 	      	};
-	       data[data.length] = tmp; //新增array
+	      	var dirid = result[i].DIR_ID;
+	      	if(data.hasOwnProperty(dirid)){ //存在同id就新增子
+	      	    data[dirid].push(tmp);
+	      	}else{  //不存在同id新增類別
+	      	    data[dirid] = []; //category
+	      	    data[dirid].push(tmp);
+	      	}
 	      }		
-	      res.send(JSON.stringify(data)); //最後將物件轉成JSON格式
+	      res.send(JSON.stringify(data)); 
 	    });
 	  });
 	};
