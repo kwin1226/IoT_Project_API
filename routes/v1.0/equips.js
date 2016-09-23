@@ -54,7 +54,7 @@ function EQUIPMENT() {
 
 	 this.update = function(EQUIPMENT, res) {
 	   connection.acquire(function(err, con) {
-	   	 var sql_data = {E_ID:EQUIPMENT.eid, E_NAME:EQUIPMENT.equipName, D_ID:EQUIPMENT.did, E_STATUS:EQUIPMENT.equipStaus, DIR_ID:EQUIPMENT.dirid};
+	   	 var sql_data = {E_ID:EQUIPMENT.eid, E_NAME:EQUIPMENT.equipName, D_ID:EQUIPMENT.did, E_STATUS:EQUIPMENT.equipStatus, DIR_ID:EQUIPMENT.dirid};
 	   	 sql_data = debug.checkReq(sql_data);
 	     con.query('update EQUIPMENT set ? where E_ID = ?', [sql_data, EQUIPMENT.eid], function(err, result) {
 	       con.release();
