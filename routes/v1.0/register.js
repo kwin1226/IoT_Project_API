@@ -25,8 +25,8 @@ function REGISTER() {
 
 	this.find = function(id, res) {  //JSON 格式比較特別
 	  connection.acquire(function(err, con) { 
-	    con.query('SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
-	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
+	    con.query('SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_STATUS, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
+	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, E_STATUS, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
 	    		  'DATE_FORMAT(O_OPEN_TIME,"%Y-%m-%d %H:%i:%s") as O_OPEN_TIME FROM '+
 	    		  '(SELECT * FROM EQUIPMENT WHERE E_ID IN (SELECT E_ID FROM OpenProduct WHERE C_ID = ?)) as A '+
 	    		  'join (SELECT * FROM OpenProduct WHERE C_ID = ? ) as B on A.E_ID = B.E_ID) as C ' +
@@ -41,6 +41,7 @@ function REGISTER() {
 	      		did:result[i].D_ID,
 	      		dirid:result[i].DIR_ID,
 	      		dirName:result[i].DIR_NAME,
+	      		equipStatus:result[i].E_STATUS,
 	      		equipName:result[i].E_NAME, 
 	      		equipPROD:result[i].E_MAKE_TIME, 
 	      		activitedTime:result[i].O_OPEN_TIME
@@ -62,8 +63,8 @@ function REGISTER() {
 		keyword = '%' +  decodeURIComponent(keyword) + '%';
 	  connection.acquire(function(err, con) { 
 	    con.query('SELECT * FROM (' + 
-	    		  'SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
-	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
+	    		  'SELECT C.C_ID, C.E_ID, C.D_ID, C.DIR_ID, D.DIR_NAME, C.E_NAME, C.E_STATUS, C.E_MAKE_TIME, C.O_OPEN_TIME FROM ' + 
+	    		  '(SELECT C_ID, A.E_ID, D_ID, DIR_ID, E_NAME, E_STATUS, DATE_FORMAT(E_MAKE_TIME,"%Y-%m-%d %H:%i:%s") as E_MAKE_TIME , '+
 	    		  'DATE_FORMAT(O_OPEN_TIME,"%Y-%m-%d %H:%i:%s") as O_OPEN_TIME FROM '+
 	    		  '(SELECT * FROM EQUIPMENT WHERE E_ID IN (SELECT E_ID FROM OpenProduct WHERE C_ID = ?)) as A '+
 	    		  'join (SELECT * FROM OpenProduct WHERE C_ID = ? ) as B on A.E_ID = B.E_ID) as C ' +
@@ -78,6 +79,7 @@ function REGISTER() {
 	      		did:result[i].D_ID,
 	      		dirid:result[i].DIR_ID,
 	      		dirName:result[i].DIR_NAME,
+	      		equipStatus:result[i].E_STATUS,
 	      		equipName:result[i].E_NAME, 
 	      		equipPROD:result[i].E_MAKE_TIME, 
 	      		activitedTime:result[i].O_OPEN_TIME

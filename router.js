@@ -19,6 +19,8 @@ module.exports = {
                 handlers[val].find(req.params.id, res);
                 });
             app.post('/'+ ver +'/' + val +'/', function(req, res){
+                console.log("封包 > " + (req));
+                console.log("req.body > " + JSON.stringify(req.body));
                 handlers[val].create(req.body, res);
                 });
             app.put('/'+ ver +'/' + val +'/', function(req, res){

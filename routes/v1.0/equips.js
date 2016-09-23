@@ -38,7 +38,7 @@ function EQUIPMENT() {
 	};
 
 	this.create = function(EQUIPMENT, res) {
-	   var sql_data = {E_ID:EQUIPMENT.eid, D_ID:EQUIPMENT.did, E_NAME:EQUIPMENT.equipName, E_MAKE_TIME:EQUIPMENT.equipPROD};
+	   var sql_data = {E_ID:EQUIPMENT.eid, D_ID:EQUIPMENT.did, E_NAME:EQUIPMENT.equipName, E_MAKE_TIME:EQUIPMENT.equipPROD, DIR_ID:EQUIPMENT.dirid};
 	   sql_data = debug.checkReq(sql_data);
 	   connection.acquire(function(err, con) {
 	     con.query('insert into EQUIPMENT set ?', sql_data, function(err, result) {
@@ -54,7 +54,7 @@ function EQUIPMENT() {
 
 	 this.update = function(EQUIPMENT, res) {
 	   connection.acquire(function(err, con) {
-	   	 var sql_data = {E_ID:EQUIPMENT.eid, E_NAME:EQUIPMENT.equipName, D_ID:EQUIPMENT.did};
+	   	 var sql_data = {E_ID:EQUIPMENT.eid, E_NAME:EQUIPMENT.equipName, D_ID:EQUIPMENT.did, E_STATUS:EQUIPMENT.equipStaus, DIR_ID:EQUIPMENT.dirid};
 	   	 sql_data = debug.checkReq(sql_data);
 	     con.query('update EQUIPMENT set ? where E_ID = ?', [sql_data, EQUIPMENT.eid], function(err, result) {
 	       con.release();
