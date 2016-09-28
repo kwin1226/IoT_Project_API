@@ -43,6 +43,9 @@ module.exports = {
                 var array =[req.params.start, req.params.id];
                 handlers[val].findBytimelimt(array, res);
                 });
+            app.get('/'+ ver +'/' + val +'/unusing/:id', function(req, res){
+                handlers[val].nullsearch(req.params.id, res);
+                });
             app.get('/'+ ver +'/' + val +'/using/:id', function(req, res){
                 handlers[val].usingsearch(req.params.id, res);
                 });
