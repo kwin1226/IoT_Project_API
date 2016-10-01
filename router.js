@@ -23,6 +23,11 @@ module.exports = {
                 console.log("req.body > " + JSON.stringify(req.body));
                 handlers[val].create(req.body, res);
                 });
+            app.post('/'+ ver +'/' + val +'/login/', function(req, res){
+                console.log("封包 > " + (req));
+                console.log("req.body > " + JSON.stringify(req.body));
+                handlers[val].login(req.body, res);
+                });
             app.put('/'+ ver +'/' + val +'/', function(req, res){
                 handlers[val].update(req.body, res);
                 });

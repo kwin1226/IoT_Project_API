@@ -44,10 +44,11 @@ function USER() {
 	};
 
 	this.create = function(USER, res) {
-	   var sql_data = {C_NAME:USER.username, C_EMAIL:USER.email, C_PHONE:USER.phone}
-	   sql_data = debug.checkReq(sql_data);
+	   // var sql_data = {C_NAME:USER.username, C_EMAIL:USER.email, C_PHONE:USER.phone, C_PASS:USER.pass}
+	   // sql_data = debug.checkReq(sql_data);
+	   var key = '2BC725612ED4DE3B638732F73677DF275385EF3A08E1E78D34A28FED3FCC55C1D41B3E3EE0000711B31A9D2FBD6507F689EC4333C018463D871B0D9DBDE24F56';
 	   connection.acquire(function(err, con) {
-	     con.query('insert into CUSTOMER set ?', sql_data, function(err, result) {
+	     con.query('insert into CUSTOMER (C_NAME, C_EMAIL, C_PHONE, C_PASS) VALUES (?, ?, ? ,AES_ENCRYPT(? , ?))', [USER.username, USER.email, USER.phone, USER.pass, key], function(err, result) {
 	       con.release();
 	       if (err) {
 	         res.send({status: 1, message: 'Customer creation failed'});
@@ -56,6 +57,22 @@ function USER() {
 	       }
 	     });
 	   });
+	 };
+
+	 this.login = function(USER, res){
+	 	// var sql_data = {C_NAME:USER.username, C_PASS:USER.pass}
+	 	// sql_data = debug.checkReq(sql_data);
+	 	var key = '2BC725612ED4DE3B638732F73677DF275385EF3A08E1E78D34A28FED3FCC55C1D41B3E3EE0000711B31A9D2FBD6507F689EC4333C018463D871B0D9DBDE24F56';
+	 	connection.acquire(function(err, con) {
+	 	  con.query('select C_NAME, C_PASS from CUSTOMER where C_NAME = ? AND C_PASS = AES_ENCRYPT( ? , ? )', [USER.username ,USER.pass, key], function(err, result) {
+	 	    con.release();
+	 	    if(result.length > 0){
+	 	    	res.send({status: 0, message: 'Customer login successfully'});
+	 	    }else{
+	 	    	res.send({status: 1, message: 'Customer login failed'});
+	 	    }
+	 	  });
+	 	});
 	 };
 	 this.update = function(USER, res) {
 	   connection.acquire(function(err, con) {
